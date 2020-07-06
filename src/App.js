@@ -6,11 +6,18 @@ class App extends React.Component {
   state = { advice: "" };
 
   fetchApi = async () => {
-    const id = Math.floor(Math.random() * 100) + 1;
-    const response = await axios.get(`https://api.adviceslip.com/advice/${id}`);
-    const data = JSON.parse(response.data + "}");
-    const { advice } = data.slip;
-    this.setState({ advice });
+    const id = Math.floor(Math.random() * 100) - 1;
+    try {
+      const response = await axios.get(
+        `https://api.adviceslip.com/advice/${id}`
+      );
+      const data = JSON.parse(response.data + "}");
+      const { advice } = data.slip;
+      this.setState({ advice });
+    } catch (error) {
+      console.log("id", id);
+      console.log(error);
+    }
   };
 
   componentDidMount = () => {
