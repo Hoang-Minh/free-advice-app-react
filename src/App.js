@@ -1,31 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
 import "./App.css";
 
-const App = () => {
-  const [advice, setAdvice] = useState("");
+class App extends React.Component {
+  state = { advice: "" };
 
-  const fetchApi = async () => {
+  fetchApi = async () => {
     const id = Math.floor(Math.random() * 100) + 1;
     const response = await axios.get(`https://api.adviceslip.com/advice/${id}`);
-    var data = JSON.parse(response.data + "}");
-    setAdvice(data.slip.advice);
+    const data = JSON.parse(response.data + "}");
+    const { advice } = data.slip;
+    this.setState({ advice });
   };
 
-  useEffect(() => {
-    fetchApi();
-  }, []);
+  componentDidMount = () => {
+    this.fetchApi();
+  };
 
-  return (
-    <div className="app">
-      <div className="card">
-        <h1 className="heading">{advice}</h1>
-        <button className="button" onClick={fetchApi}>
-          <span>GIVE ME AN ADVICE !!!</span>
-        </button>
+  render() {
+    const { advice } = this.state;
+    return (
+      <div className="app">
+        <div className="card">
+          <h1 className="heading">{advice}</h1>
+          <button className="button" onClick={this.fetchApi}>
+            <span>GIVE ME AN ADVICE !!!</span>
+          </button>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default App;
